@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO para página de agradecimiento -->
+    <title>¡Bienvenido a la Clase! - Profesor Minimax | Método Minimax</title>
+    <meta name="description" content="¡Gracias por suscribirte al Método Minimax! Ya eres parte de la comunidad que aprende a ahorrar con minimalismo inteligente.">
+    <meta name="robots" content="noindex, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="¡Bienvenido a la Clase del Profesor Minimax!">
+    <meta property="og:description" content="Ya eres parte de la comunidad Minimax. Te llegará tu primera clase en 5 minutos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://menosesmasdinero.netlify.app/gracias.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <style>
+        /* Variables CSS - Iguales que el index */
+        :root {
+            --color-primary: #2ECC71;
+            --color-secondary: #3498DB;
+            --color-dark: #34495E;
+            --color-light: #ECF0F1;
+            --color-white: #FFFFFF;
+            --color-accent: #F39C12;
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            --shadow: 0 2px 15px rgba(0,0,0,0.1);
+            --shadow-hover: 0 5px 25px rgba(0,0,0,0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--color-dark);
+            background: linear-gradient(135deg, var(--color-light) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 700px;
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-hover);
+            overflow: hidden;
+            text-align: center;
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-white);
+            padding: 4rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 25px 25px;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-25px, -25px) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            font-weight: 700;
+        }
+
+        .header .emoji {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content {
+            padding: 3rem 2rem;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, var(--color-light), var(--color-white));
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 3rem;
+            border-left: 5px solid var(--color-primary);
+        }
+
+        .welcome-message h2 {
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-message p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .benefits-list {
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+
+        .benefits-list h3 {
+            color: var(--color-secondary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            text-align: left;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .benefit-item:hover {
+            transform: translateX(5px);
+            background: var(--color-light);
+        }
+
+        .benefit-item .icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-item .text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+            color: var(--color-white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+        }
+
+        .cta-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--color-white);
+            color: var(--color-primary);
+            padding: 1.2rem 2.5rem;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .footer-note {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-light);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .footer-note a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* Efectos especiales */
+        .confetti {
+            position: fixed;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--color-primary);
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        .confetti-piece:nth-child(2n) {
+            background: var(--color-secondary);
+            animation-delay: 0.5s;
+        }
+
+        .confetti-piece:nth-child(3n) {
+            background: var(--color-accent);
+            animation-delay: 1s;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+            }
+            
+            .header {
+                padding: 3rem 1.5rem 2rem;
+            }
+            
+            .content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        *:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Efecto confeti opcional -->
+    <div class="confetti" id="confetti"></div>
+
+    <div class="container">
+        <div class="header">
+            <span class="emoji">🎉</span>
+            <h1>¡Bienvenido a la Clase!</h1>
+            <p>Ya eres parte de la comunidad del <strong>Profesor Minimax</strong></p>
+        </div>
+
+        <div class="content">
+            <div class="welcome-message">
+                <h2>✅ Suscripción Confirmada</h2>
+                <p>Te has unido oficialmente al método que está ayudando a cientos de personas a ahorrar dinero aplicando minimalismo inteligente.</p>
+                <p><strong>📧 Tu primera clase llegará en los próximos 5 minutos.</strong><br>
+                <small>(Revisa tu carpeta de spam por si acaso)</small></p>
+            </div>
+
+            <div class="benefits-list">
+                <h3>📚 ¿Qué recibirás cada semana?</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <span class="icon">🧮</span>
+                        <span class="text">Calculadoras exclusivas para suscriptores</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="icon">💡</span>
+                        <span class="text">Tips del Método Minimax aplicados</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="icon">🛍️</span>
+                        <span class="text">Ofertas de segunda mano seleccionadas</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="icon">📊</span>
+                        <span class="text">Casos reales con números exactos</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="icon">🎯</span>
+                        <span class="text">Estrategias específicas para España</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="icon">🚀</span>
+                        <span class="text">Acceso anticipado a nuevos contenidos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h3>🎯 Mientras tanto...</h3>
+                <p>Vuelve a la web para usar las calculadoras gratuitas y repasar el Método Minimax en 5 pasos. ¡Empieza a ahorrar desde hoy mismo!</p>
+                <a href="/" class="cta-button">🏠 Volver al Método Minimax</a>
+            </div>
+
+            <div class="footer-note">
+                <p><strong>Profesor Minimax</strong> - Menos es Más Dinero</p>
+                <p>📧 ¿Tienes alguna pregunta? Escríbeme a <a href="mailto:profesorminimax@gmail.com">profesorminimax@gmail.com</a></p>
+                <p><small>No spam, no ventas agresivas. Solo contenido de valor para tu educación financiera.</small></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Efecto confeti al cargar la página
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#2ECC71', '#3498DB', '#F39C12'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.className = 'confetti-piece';
+                confettiPiece.style.left = Math.random() * 100 + '%';
+                confettiPiece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confettiPiece.style.animationDelay = Math.random() * 3 + 's';
+                confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confettiContainer.appendChild(confettiPiece);
+            }
+            
+            // Limpiar confeti después de 5 segundos
+            setTimeout(() => {
+                confettiContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Activar confeti al cargar
+        window.addEventListener('load', createConfetti);
+
+        // Analytics para página de agradecimiento
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'newsletter_signup_success', {
+                'method': 'netlify_forms',
+                'page_location': window.location.href
+            });
+        }
+
+        // Redirección automática después de 30 segundos (opcional)
+        setTimeout(() => {
+            const autoRedirect = confirm('¿Te gustaría volver a la página principal para seguir explorando el Método Minimax?');
+            if (autoRedirect) {
+                window.location.href = '/';
+            }
+        }, 30000);
+
+        // Efecto de escritura en el mensaje principal
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Activar efecto de escritura después de la animación inicial
+        setTimeout(() => {
+            const welcomeTitle = document.querySelector('.welcome-message h2');
+            if (welcomeTitle) {
+                const originalText = welcomeTitle.textContent;
+                typeWriter(welcomeTitle, originalText, 80);
+            }
+        }, 1000);
+
+        // Contador de tiempo para la primera clase
+        function startCountdown() {
+            const countdownElement = document.createElement('div');
+            countdownElement.style.cssText = `
+                background: linear-gradient(135deg, #F39C12, #E67E22);
+                color: white;
+                padding: 1rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                text-align: center;
+                font-weight: 600;
+            `;
+            
+            let timeLeft = 300; // 5 minutos en segundos
+            
+            function updateCountdown() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.innerHTML = `⏱️ Tu primera clase llegará en: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    countdownElement.innerHTML = '📧 ¡Tu primera clase debería haber llegado! Revisa tu email.';
+                    countdownElement.style.background = 'linear-gradient(135deg, #2ECC71, #27AE60)';
+                }
+            }
+            
+            // Insertar contador después del mensaje de bienvenida
+            const welcomeMessage = document.querySelector('.welcome-message');
+            welcomeMessage.insertAdjacentElement('afterend', countdownElement);
+            updateCountdown();
+        }
+
+        // Iniciar countdown después de 2 segundos
+        setTimeout(startCountdown, 2000);
+    </script>
+</body>
+</html>
