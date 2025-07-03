@@ -464,7 +464,7 @@
             line-height: 1.5;
         }
 
-        /* Newsletter mejorado */
+        /* Newsletter con Netlify Forms - ACTUALIZADO */
         .newsletter {
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             color: var(--color-white);
@@ -510,10 +510,12 @@
             gap: 1rem;
             position: relative;
             z-index: 2;
+            flex-wrap: wrap;
         }
 
-        .newsletter-form input {
+        .newsletter-form input[type="email"] {
             flex: 1;
+            min-width: 250px;
             padding: 1.2rem;
             border: none;
             border-radius: var(--border-radius);
@@ -537,6 +539,14 @@
             box-shadow: var(--shadow);
         }
 
+        /* reCAPTCHA styling */
+        .newsletter-form .g-recaptcha {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
         /* Método Minimax destacado */
         .metodo-destacado {
             background: linear-gradient(135deg, var(--color-white), var(--color-light));
@@ -549,6 +559,7 @@
         .metodo-list {
             list-style: none;
             padding: 0;
+            counter-reset: step-counter;
         }
 
         .metodo-list li {
@@ -585,10 +596,6 @@
             justify-content: center;
             font-weight: bold;
             font-size: 0.9rem;
-        }
-
-        .metodo-list {
-            counter-reset: step-counter;
         }
 
         /* Footer mejorado */
@@ -647,6 +654,12 @@
 
             .newsletter-form {
                 flex-direction: column;
+                align-items: center;
+            }
+
+            .newsletter-form input[type="email"] {
+                width: 100%;
+                min-width: auto;
             }
 
             section {
@@ -686,6 +699,26 @@
         *:focus {
             outline: 2px solid var(--color-primary);
             outline-offset: 2px;
+        }
+
+        /* Estilos para notificación de éxito/error */
+        .form-message {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -806,15 +839,16 @@
             </div>
         </section>
 
-        <!-- Últimas Clases YouTube -->
-        <!-- SECCIÓN ELIMINADA -->
-
-        <!-- Newsletter -->
+        <!-- Newsletter con Netlify Forms - ACTUALIZADO -->
         <section class="newsletter">
             <h2>🎓 Únete a la Clase del Profesor Minimax</h2>
             <p>Recibe cada semana nuevas clases, calculadoras exclusivas y ofertas de segunda mano directamente en tu email. <strong>100% gratuito, sin spam.</strong></p>
-            <form class="newsletter-form" onsubmit="suscribirNewsletter(event)">
-                <input type="email" placeholder="tu@email.com" required aria-label="Tu email">
+            
+            <!-- NUEVO: Formulario Netlify Forms -->
+            <form class="newsletter-form" name="newsletter-minimax" method="POST" data-netlify="true" data-netlify-recaptcha="true" action="/gracias.html">
+                <input type="hidden" name="form-name" value="newsletter-minimax">
+                <input type="email" name="email" placeholder="tu@email.com" required aria-label="Tu email">
+                <div data-netlify-recaptcha="true"></div>
                 <button type="submit">📧 Suscribirme Gratis</button>
             </form>
         </section>
@@ -981,6 +1015,7 @@
             // Scroll suave al resultado
             resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+
         // Calculadora Costo por Uso mejorada
         function calcularCostoPorUso() {
             const precio = parseFloat(document.getElementById('precio').value);
@@ -1044,33 +1079,6 @@
 
             // Scroll suave al resultado
             resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        // Newsletter con Netlify Forms
-        function suscribirNewsletter(event) {
-            event.preventDefault();
-            const form = event.target;
-            const email = form.querySelector('input[type="email"]').value;
-            const button = form.querySelector('button');
-
-            // Estado de carga
-            button.innerHTML = '⏳ Suscribiendo...';
-            button.disabled = true;
-
-            // Simular envío (después integrarás Netlify Forms o EmailJS)
-            setTimeout(() => {
-                alert(`🎉 ¡Genial! ${email} se ha suscrito a las clases del Profesor Minimax.\n\n📧 Te llegará la primera clase en 5 minutos.\n💡 Revisa tu carpeta de spam por si acaso.`);
-                form.reset();
-                button.innerHTML = '📧 Suscribirme Gratis';
-                button.disabled = false;
-
-                // Analytics event para newsletter
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'newsletter_signup', {
-                        'method': 'web_form'
-                    });
-                }
-            }, 1500);
         }
 
         // Smooth scroll mejorado para navegación
@@ -1191,28 +1199,29 @@
         document.addEventListener('mousedown', () => {
             document.body.classList.remove('keyboard-navigation');
         });
-        </script>
-        <!-- Schema.org adicional para calculadora presupuesto -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "name": "Calculadora Presupuesto España Real",
-          "description": "Herramienta gratuita para analizar tu situación financiera adaptada a España 2025",
-          "url": "https://menosesmasdinero.netlify.app/#calculadoras",
-          "applicationCategory": "FinanceApplication",
-          "operatingSystem": "Web Browser",
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "EUR"
-          },
-          "creator": {
-            "@type": "Person",
-            "name": "Profesor Minimax"
-          }
-        }
-        </script>
+    </script>
 
-        </body>
-        </html>
+    <!-- Schema.org adicional para calculadora presupuesto -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calculadora Presupuesto España Real",
+      "description": "Herramienta gratuita para analizar tu situación financiera adaptada a España 2025",
+      "url": "https://menosesmasdinero.netlify.app/#calculadoras",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "creator": {
+        "@type": "Person",
+        "name": "Profesor Minimax"
+      }
+    }
+    </script>
+
+</body>
+</html>
